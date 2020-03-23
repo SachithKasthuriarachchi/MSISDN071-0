@@ -7,8 +7,13 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.os.Bundle;
+import android.util.Log;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,5 +44,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         System.out.println(msisdn + "Chit");
+        String TAG = "PhoneActivityTAG";
+        //This works for multiple sims
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            List<SubscriptionInfo> subscription = SubscriptionManager.from(getApplicationContext()).getActiveSubscriptionInfoList();
+            for (int i = 0; i < subscription.size(); i++) {
+                SubscriptionInfo info = subscription.get(i);
+                Log.d(TAG, "number " + info.getNumber());
+                Log.d(TAG, "network name : " + info.getCarrierName());
+                Log.d(TAG, "country iso " + info.getCountryIso());
+            }
+        }
     }
 }
